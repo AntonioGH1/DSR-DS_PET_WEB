@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Administradores.dart'; // Importa el archivo Administradores.dart
+import 'CerrarSesionDialog.dart'; // Importa el archivo de la pantalla emergente
 
 class Principal extends StatelessWidget {
   @override
@@ -13,8 +14,13 @@ class Principal extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
-              // Implementa la lógica para cerrar sesión aquí
-              Navigator.pop(context); // Regresa a la página anterior (Login)
+              // Muestra la pantalla emergente para confirmar el cierre de sesión
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CerrarSesionDialog();
+                },
+              );
             },
           ),
           SizedBox(width: 16), // Espacio entre el botón y el borde derecho

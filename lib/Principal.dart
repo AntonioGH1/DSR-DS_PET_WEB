@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Administradores.dart'; // Importa el archivo Administradores.dart
 import 'CerrarSesionDialog.dart'; // Importa el archivo de la pantalla emergente
+import 'Dispositivos.dart'; // Importa el archivo Dispositivos.dart
 
 class Principal extends StatelessWidget {
   @override
@@ -84,7 +85,13 @@ class Principal extends StatelessWidget {
               ),
               // Botón de Dispositivos
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Navegar a la página de Dispositivos
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Dispositivos()),
+                  );
+                },
                 child: Text('Dispositivos',
                     style: TextStyle(color: Colors.black)), // Texto negro
                 style: ElevatedButton.styleFrom(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'Home.dart';
+import '../Screens/Home.dart';
 
 class InicioSesion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        automaticallyImplyLeading: false, // Oculta el botón de retroceso
       ),
       body: Center(
         child: Column(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Editar.dart'; // Importa la pantalla emergente Editar.dart
-import 'Apagar.dart'; // Importa el diálogo ApagarDialog
+import '../Widgets/Apagar.dart'; // Importa el diálogo ApagarDialog
 
 class Configurar extends StatelessWidget {
   @override

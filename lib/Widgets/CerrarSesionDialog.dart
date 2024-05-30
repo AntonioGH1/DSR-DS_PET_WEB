@@ -1,3 +1,4 @@
+import 'package:cat_admin/Screens/iniciosesion.dart';
 import 'package:flutter/material.dart';
 
 class CerrarSesionDialog extends StatelessWidget {
@@ -26,8 +27,11 @@ class CerrarSesionDialog extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () {
-                // Implementa la lógica para cerrar sesión aquí
-                Navigator.pop(context); // Regresa a la página anterior (Login)
+                // Navega a la pantalla de inicio de sesión
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => InicioSesion()),
+                );
               },
               child: Text(
                 'SÍ',

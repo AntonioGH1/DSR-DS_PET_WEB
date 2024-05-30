@@ -1,54 +1,12 @@
 import 'package:flutter/material.dart';
-import 'Configurar.dart'; // Importa el archivo Configurar.dart para la pantalla emergente
+import '../Screens/Configurar.dart'; // Importa el archivo Configurar.dart para la pantalla emergente
 
-class Dispositivos extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back), // Icono de flecha hacia atrás
-          onPressed: () {
-            Navigator.pop(context); // Volver atrás
-          },
-        ),
-        title: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.end, // Alinear al extremo derecho
-          children: [
-            Text(
-              '<<Dispositivos Pet+>>',
-              style: TextStyle(fontSize: 20), // Tamaño de texto aumentado
-            ),
-          ],
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(90, 15, 90, 0), // Ajusta el padding
-        child: GridView.count(
-          crossAxisCount: 3, // Tres columnas
-          mainAxisSpacing: 20, // Espacio vertical entre las tarjetas reducido
-          crossAxisSpacing:
-              70, // Espacio horizontal entre las tarjetas reducido
-          children: List.generate(6, (index) {
-            return TarjetaDispositivo(
-              idDispositivo: 'ID Dispositivo ${index + 1}',
-              status: 'Activo', // Por defecto, todos están activos
-              idDueno: 'ID Dueño ${index + 1}',
-            );
-          }),
-        ),
-      ),
-    );
-  }
-}
-
-class TarjetaDispositivo extends StatelessWidget {
+class DispositivoCard extends StatelessWidget {
   final String idDispositivo;
   final String status;
   final String idDueno;
 
-  TarjetaDispositivo({
+  DispositivoCard({
     required this.idDispositivo,
     required this.status,
     required this.idDueno,

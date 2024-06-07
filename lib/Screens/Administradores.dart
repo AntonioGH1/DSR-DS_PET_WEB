@@ -1,6 +1,45 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class Administradores extends StatelessWidget {
+class Administradores extends StatefulWidget {
+  @override
+  _AdministradoresState createState() => _AdministradoresState();
+}
+
+class _AdministradoresState extends State<Administradores> {
+  List<Admin> _admins = [];
+  bool _isLoading = true;
+  String _errorMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAdmins();
+  }
+
+  Future<void> _fetchAdmins() async {
+    try {
+      final response =
+          await http.get(Uri.parse('http://127.0.0.1:8000/admins'));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          _admins = data.map((json) => Admin.fromJson(json)).toList();
+          _isLoading = false;
+        });
+      } else {
+        throw Exception('Error al obtener administradores');
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error al obtener administradores: $e';
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,20 +61,26 @@ class Administradores extends StatelessWidget {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(70, 15, 70, 0), // Ajusta el padding
-        child: GridView.count(
-          crossAxisCount: 3, // Tres columnas
-          mainAxisSpacing: 20, // Espacio vertical entre las tarjetas reducido
-          crossAxisSpacing:
-              70, // Espacio horizontal entre las tarjetas reducido
-          children: List.generate(6, (index) {
-            return TarjetaPerfil(
-              nombreUsuario: 'Usuario ${index + 1}',
-            );
-          }),
-        ),
-      ),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : _errorMessage.isNotEmpty
+              ? Center(child: Text(_errorMessage))
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                      70, 15, 70, 0), // Ajusta el padding
+                  child: GridView.count(
+                    crossAxisCount: 3, // Tres columnas
+                    mainAxisSpacing:
+                        20, // Espacio vertical entre las tarjetas reducido
+                    crossAxisSpacing:
+                        70, // Espacio horizontal entre las tarjetas reducido
+                    children: List.generate(_admins.length, (index) {
+                      return TarjetaPerfil(
+                        nombreUsuario: _admins[index].nombre,
+                      );
+                    }),
+                  ),
+                ),
     );
   }
 }
@@ -75,6 +120,28 @@ class TarjetaPerfil extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class Admin {
+  final String id;
+  final String nombre;
+  final String correo;
+  final String imagen;
+
+  Admin(
+      {required this.id,
+      required this.nombre,
+      required this.correo,
+      required this.imagen});
+
+  factory Admin.fromJson(Map<String, dynamic> json) {
+    return Admin(
+      id: json['id'],
+      nombre: json['nombre'],
+      correo: json['correo'],
+      imagen: json['imagen'],
     );
   }
 }

@@ -25,6 +25,7 @@ class _AdministradoresState extends State<Administradores> {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
+        print(data); // Agregar esta línea para imprimir los datos
         setState(() {
           _admins = data;
           _isLoading = false;
@@ -110,7 +111,7 @@ class TarjetaPerfil extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 40,
-            backgroundImage: AssetImage('assets/usuario.png'),
+            backgroundImage: AssetImage('../assets/usuario.png'),
           ),
           SizedBox(height: 4),
           Text(

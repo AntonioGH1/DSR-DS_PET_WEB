@@ -1,8 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Editar extends StatelessWidget {
+  final String idDispositivo;
+  final String status;
+  final String activationTime;
+  final void Function(Map<String, dynamic>) onSave;
+
+  Editar({
+    required this.idDispositivo,
+    required this.status,
+    required this.activationTime,
+    required this.onSave,
+  });
+
+  final TextEditingController _statusController = TextEditingController();
+  final TextEditingController _activationTimeController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    _statusController.text = status;
+    _activationTimeController.text = activationTime;
+
     return Dialog(
       backgroundColor: Color.fromARGB(255, 236, 236, 215), // Fondo beige
       shape: RoundedRectangleBorder(
@@ -18,70 +39,26 @@ class Editar extends StatelessWidget {
             children: [
               // Campo de ID de Dispositivo (no editable)
               Text(
-                'ID: ABC123',
+                'ID: $idDispositivo',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 4), // Espacio entre los campos
-              // Campo de Dueño (editable)
+              // Campo de Status (editable)
               TextFormField(
-                initialValue: 'Alberto',
+                controller: _statusController,
                 decoration: InputDecoration(
-                  labelText: 'Dueño',
+                  labelText: 'Status',
                   isDense: true, // Reduce el espacio vertical
                   contentPadding: EdgeInsets.symmetric(
                       horizontal: 12), // Reduce el espacio horizontal
                 ),
               ),
               SizedBox(height: 4), // Espacio entre los campos
-              // Campo de Gato (editable)
+              // Campo de Activation Time (editable)
               TextFormField(
-                initialValue: 'Firu',
+                controller: _activationTimeController,
                 decoration: InputDecoration(
-                  labelText: 'Gato',
-                  isDense: true, // Reduce el espacio vertical
-                  contentPadding: EdgeInsets.symmetric(
-                      horizontal: 12), // Reduce el espacio horizontal
-                ),
-              ),
-              SizedBox(height: 4), // Espacio entre los campos
-              // Campo de Raza (editable)
-              TextFormField(
-                initialValue: 'Alemán',
-                decoration: InputDecoration(
-                  labelText: 'Raza',
-                  isDense: true, // Reduce el espacio vertical
-                  contentPadding: EdgeInsets.symmetric(
-                      horizontal: 12), // Reduce el espacio horizontal
-                ),
-              ),
-              SizedBox(height: 4), // Espacio entre los campos
-              // Campo de Edad (editable)
-              TextFormField(
-                initialValue: '2 años',
-                decoration: InputDecoration(
-                  labelText: 'Edad',
-                  isDense: true, // Reduce el espacio vertical
-                  contentPadding: EdgeInsets.symmetric(
-                      horizontal: 12), // Reduce el espacio horizontal
-                ),
-              ),
-              SizedBox(height: 4), // Espacio entre los campos
-              // Campo de Horario (editable)
-              TextFormField(
-                initialValue: 'Lunes 9 am',
-                decoration: InputDecoration(
-                  labelText: 'Horario',
-                  isDense: true, // Reduce el espacio vertical
-                  contentPadding: EdgeInsets.symmetric(
-                      horizontal: 12), // Reduce el espacio horizontal
-                ),
-              ),
-              SizedBox(height: 4), // Espacio entre los campos
-              // Campo de Alimento (editable)
-              TextFormField(
-                initialValue: '400 g',
-                decoration: InputDecoration(
-                  labelText: 'Alimento',
+                  labelText: 'Activation Time',
                   isDense: true, // Reduce el espacio vertical
                   contentPadding: EdgeInsets.symmetric(
                       horizontal: 12), // Reduce el espacio horizontal
@@ -93,8 +70,14 @@ class Editar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // Lógica para guardar los datos
+                      final data = {
+                        'status': _statusController.text,
+                        'activationTime': _activationTimeController.text,
+                      };
+                      onSave(data);
+                      Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:

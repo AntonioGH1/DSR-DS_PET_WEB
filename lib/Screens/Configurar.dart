@@ -1,11 +1,37 @@
 import 'package:flutter/material.dart';
 import 'Editar.dart'; // Importa la pantalla emergente Editar.dart
 import '../Widgets/Apagar.dart'; // Importa el diálogo ApagarDialog
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Configurar extends StatelessWidget {
   final String idDispositivo;
+  final String status;
+  final String activationTime;
 
-  Configurar({required this.idDispositivo});
+  Configurar({
+    required this.idDispositivo,
+    required this.status,
+    required this.activationTime,
+  });
+
+  Future<void> _actualizarDispositivo(
+      String id, Map<String, dynamic> data) async {
+    final url =
+        'https://eouww9yquk.execute-api.us-east-1.amazonaws.com/machines/get_machines_user?id=4d3dfcab-c809-453a-9871-aa128193cf21';
+    final response = await http.put(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: json.encode(data),
+    );
+
+    if (response.statusCode == 200) {
+      // Si la actualización fue exitosa
+      print('Dispositivo actualizado');
+    } else {
+      throw Exception('Error al actualizar el dispositivo');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +51,7 @@ class Configurar extends StatelessWidget {
                     8), // Espacio entre el título y los datos del dispositivo
             // Datos del dispositivo (texto de prueba)
             Text(
-              'ID: $idDispositivo\nStatus: Activo\nActivation Time: 19:30',
+              'ID: $idDispositivo\nStatus: $status\nActivation Time: $activationTime',
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
@@ -58,7 +84,14 @@ class Configurar extends StatelessWidget {
                 // Muestra la pantalla emergente de edición
                 showDialog(
                   context: context,
-                  builder: (BuildContext context) => Editar(),
+                  builder: (BuildContext context) => Editar(
+                    idDispositivo: idDispositivo,
+                    status: status,
+                    activationTime: activationTime,
+                    onSave: (data) {
+                      _actualizarDispositivo(idDispositivo, data);
+                    },
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(

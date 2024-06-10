@@ -44,7 +44,11 @@ class DispositivoCard extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return Configurar(idDispositivo: idDispositivo ?? "");
+                    return Configurar(
+                      idDispositivo: idDispositivo ?? "",
+                      status: status ?? "N/A",
+                      activationTime: activationTime ?? "N/A",
+                    );
                   },
                 );
               },

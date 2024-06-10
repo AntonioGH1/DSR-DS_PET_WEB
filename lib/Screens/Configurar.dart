@@ -3,6 +3,10 @@ import 'Editar.dart'; // Importa la pantalla emergente Editar.dart
 import '../Widgets/Apagar.dart'; // Importa el diálogo ApagarDialog
 
 class Configurar extends StatelessWidget {
+  final String idDispositivo;
+
+  Configurar({required this.idDispositivo});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -21,7 +25,7 @@ class Configurar extends StatelessWidget {
                     8), // Espacio entre el título y los datos del dispositivo
             // Datos del dispositivo (texto de prueba)
             Text(
-              'ID: 123456\nStatus: Activo\nDueño: Juan Pérez',
+              'ID: $idDispositivo\nStatus: Activo\nActivation Time: 19:30',
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
@@ -78,7 +82,8 @@ class Configurar extends StatelessWidget {
                 // Muestra el diálogo de apagado
                 showDialog(
                   context: context,
-                  builder: (BuildContext context) => Apagar(),
+                  builder: (BuildContext context) =>
+                      Apagar(idDispositivo: idDispositivo),
                 );
               },
               style: ElevatedButton.styleFrom(

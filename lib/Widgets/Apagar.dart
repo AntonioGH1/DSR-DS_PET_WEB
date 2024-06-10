@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'Confirmacion.dart';
 
 class Apagar extends StatelessWidget {
+  final String idDispositivo;
+
+  Apagar({required this.idDispositivo});
+
+  // Método para actualizar el estado del dispositivo
+  void actualizarEstadoDispositivo() {
+    // Aquí debes colocar la lógica para actualizar el estado del dispositivo
+    // Puedes llamar a un método en tu clase de gestión de estado o realizar la lógica directamente aquí
+    // Por ejemplo:
+    // dispositivo.estado = false;
+    // Luego, actualiza la interfaz de usuario si es necesario
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -33,7 +46,12 @@ class Apagar extends StatelessWidget {
                   builder: (BuildContext context) {
                     return Confirmacion();
                   },
-                );
+                ).then((confirmado) {
+                  // Verificar si el usuario confirmó antes de actualizar el estado
+                  if (confirmado == true) {
+                    actualizarEstadoDispositivo(); // Llamar al método para actualizar el estado del dispositivo
+                  }
+                });
               },
               child: Text(
                 'SÍ',

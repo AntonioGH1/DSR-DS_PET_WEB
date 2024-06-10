@@ -1,18 +1,17 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Principal.dart'; // Importa la página Principal.dart
 
 class LoginPage extends StatelessWidget {
   final TextEditingController matriculaController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
   Future<void> _login(BuildContext context) async {
     final String url = 'http://127.0.0.1:8000/login'; // URL del backend
     final Map<String, String> headers = {'Content-Type': 'application/json'};
     final Map<String, String> body = {
-      'matricula': matriculaController.text,
-      'password': passwordController.text,
+      'Matricula': matriculaController.text,
     };
 
     try {
@@ -22,7 +21,13 @@ class LoginPage extends StatelessWidget {
         body: json.encode(body),
       );
 
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
       if (response.statusCode == 200) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('matricula', matriculaController.text);
+
         // Autenticación exitosa, navegar a la página principal
         Navigator.push(
           context,
@@ -32,7 +37,7 @@ class LoginPage extends StatelessWidget {
         // Autenticación fallida, mostrar mensaje de error
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error de autenticación'),
+            content: Text('Error de autenticación: ${response.statusCode}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -41,7 +46,7 @@ class LoginPage extends StatelessWidget {
       print('Error al enviar solicitud HTTP: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error al conectar con el servidor'),
+          content: Text('Error al conectar con el servidor: $e'),
           backgroundColor: Colors.red,
         ),
       );
@@ -78,25 +83,6 @@ class LoginPage extends StatelessWidget {
                   decoration: InputDecoration(
                     hintText: 'Matrícula',
                     prefixIcon: Icon(Icons.account_circle),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(color: Colors.grey),
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                  ),
-                  maxLines: 1,
-                ),
-              ),
-              SizedBox(height: 20),
-              SizedBox(
-                width: 300, // Ancho del TextField
-                child: TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Contraseña',
-                    prefixIcon: Icon(Icons.lock),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide: BorderSide(color: Colors.grey),
